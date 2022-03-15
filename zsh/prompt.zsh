@@ -20,17 +20,17 @@ git_dirty() {
   else
     if [[ $($git status --porcelain) == "" ]]
     then
-      echo "on %{$fg_bold[green]%}$(git_prompt_info)%{$reset_color%}"
+      echo "%{$fg_bold[green]%}$(git_prompt_info)%{$reset_color%}"
     else
-      echo "on %{$fg_bold[red]%}$(git_prompt_info)%{$reset_color%}"
+      echo "%{$fg_bold[red]%}$(git_prompt_info)%{$reset_color%}"
     fi
   fi
 }
 
 git_prompt_info () {
  ref=$($git symbolic-ref HEAD 2>/dev/null) || return
-# echo "(%{\e[0;33m%}${ref#refs/heads/}%{\e[0m%})"
- echo "${ref#refs/heads/}"
+#  echo "(%{\e[0;33m%}${ref#refs/heads/}%{\e[0m%})"
+ echo "(${ref#refs/heads/})"
 }
 
 # This assumes that you always have an origin named `origin`, and that you only
@@ -71,7 +71,11 @@ set_prompt () {
   export RPROMPT="%{$fg_bold[cyan]%}%{$reset_color%}"
 }
 
+
+PROMPT="%(?:%{$fg_bold[green]%}➜ :%{$fg_bold[red]%}➜ )"
+PROMPT+=' %{$fg[cyan]%}%c%{$reset_color%} $(git_dirty) '
+
+
 precmd() {
   title "zsh" "%m" "%55<...<%~"
-  set_prompt
 }
